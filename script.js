@@ -1,4 +1,4 @@
-const rolesApiUrl = '/api/group-roles'; // Ensure this matches your server endpoint
+const rolesApiUrl = '/api/group-roles'; // Ensure this matches the server endpoint
 
 async function fetchGroupRoles() {
     try {
