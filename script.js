@@ -1,30 +1,39 @@
-const apiUrl = '/api/group-members'; // This should match your server's endpoint
+const rolesApiUrl = '/api/group-roles'; // Endpoint to get roles
 
-async function fetchGroupMembers() {
+async function fetchGroupRoles() {
     try {
-        const response = await fetch(apiUrl);
+        const response = await fetch(rolesApiUrl);
+        if (!response.ok) throw new Error(`API Request Error: ${response.status} ${response.statusText}`);
+        const data = await response.json();
+
+        const roles = data.roles; // Assuming data contains a list of roles
+
+        for (const role of roles) {
+            const roleMembersUrl = `/api/role-members/${role.id}`;
+            await fetchAndDisplayMembers(roleMembersUrl, role.name);
+        }
+    } catch (error) {
+        console.error('Error fetching group roles:', error);
+        document.getElementById('members-list').textContent = 'Failed to load group roles. Please check the console for details.';
+    }
+}
+
+async function fetchAndDisplayMembers(url, roleName) {
+    try {
+        const response = await fetch(url);
         if (!response.ok) throw new Error(`API Request Error: ${response.status} ${response.statusText}`);
         const data = await response.json();
 
         const membersList = document.getElementById('members-list');
-        membersList.innerHTML = ''; // Clear existing content
-
-        for (const role of data.roles) {
-            const roleMembersUrl = `https://api.roblox.com/groups/${groupId}/roles/${role.id}/members`;
-            const roleResponse = await fetch(roleMembersUrl);
-            if (!roleResponse.ok) throw new Error(`Role Members Error: ${roleResponse.status} ${roleResponse.statusText}`);
-            const roleData = await roleResponse.json();
-
-            for (const member of roleData.data) {
-                const listItem = document.createElement('li');
-                listItem.textContent = `${member.username} - ${role.name}`;
-                listItem.dataset.username = member.username; // Store username for search
-                membersList.appendChild(listItem);
-            }
+        for (const member of data.data) { // Assuming data contains a list of members
+            const listItem = document.createElement('li');
+            listItem.textContent = `${member.username} - ${roleName}`;
+            listItem.dataset.username = member.username; // Store username for search
+            membersList.appendChild(listItem);
         }
     } catch (error) {
-        console.error('Error fetching group members:', error);
-        document.getElementById('members-list').textContent = 'Failed to load group members. Please check the console for details.';
+        console.error('Error fetching role members:', error);
+        document.getElementById('members-list').textContent = 'Failed to load role members. Please check the console for details.';
     }
 }
 
@@ -42,8 +51,8 @@ function filterMembers() {
     });
 }
 
-// Fetch members on page load
-fetchGroupMembers();
+// Fetch roles and members on page load
+fetchGroupRoles();
 
 // Add event listener for the search bar input
 document.getElementById('search-bar').addEventListener('input', filterMembers);
