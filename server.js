@@ -6,7 +6,7 @@ const port = process.env.PORT || 3000;
 app.use(express.static('public'));
 
 app.get('/api/group-members', (req, res) => {
-    const groupId = 'YOUR_GROUP_ID'; // Replace with your actual group ID
+    const groupId = '11592051'; // Replace with your actual group ID
     const apiUrl = `https://groups.roblox.com/v1/groups/${groupId}/roles`;
 
     request(apiUrl, (error, response, body) => {
