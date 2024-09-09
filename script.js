@@ -1,20 +1,19 @@
 const groupId = '11592051'; // Replace with your actual group ID
-const apiUrl = `https://groups.roblox.com/v1/groups/${groupId}/roles`;
+const apiUrl = '/api/group-members'; // Proxy endpoint or server-side route
 
 async function fetchGroupMembers() {
     try {
         const response = await fetch(apiUrl);
-        if (!response.ok) throw new Error(`Error: ${response.statusText}`);
+        if (!response.ok) throw new Error(`API Request Error: ${response.status} ${response.statusText}`);
         const data = await response.json();
 
         const membersList = document.getElementById('members-list');
         membersList.innerHTML = ''; // Clear existing content
 
         for (const role of data.roles) {
-            // Use the correct endpoint if available
             const roleMembersUrl = `https://api.roblox.com/groups/${groupId}/roles/${role.id}/members`;
             const roleResponse = await fetch(roleMembersUrl);
-            if (!roleResponse.ok) throw new Error(`Error: ${roleResponse.statusText}`);
+            if (!roleResponse.ok) throw new Error(`Role Members Error: ${roleResponse.status} ${roleResponse.statusText}`);
             const roleData = await roleResponse.json();
 
             for (const member of roleData.data) {
@@ -26,7 +25,7 @@ async function fetchGroupMembers() {
         }
     } catch (error) {
         console.error('Error fetching group members:', error);
-        document.getElementById('members-list').textContent = 'Failed to load group members.';
+        document.getElementById('members-list').textContent = 'Failed to load group members. Please check the console for details.';
     }
 }
 
