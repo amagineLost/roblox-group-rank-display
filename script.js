@@ -1,4 +1,4 @@
-const groupId = 'YOUR_GROUP_ID'; // Replace with your group ID
+const groupId = '11592051'; // Replace with your group ID
 const apiUrl = `https://groups.roblox.com/v1/groups/${groupId}/roles`;
 
 async function fetchGroupMembers() {
