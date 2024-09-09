@@ -44,6 +44,8 @@ function filterMembers() {
     });
 }
 
-document.getElementById('search-bar').addEventListener('input', filterMembers);
-
+// Fetch members on page load
 fetchGroupMembers();
+
+// Add event listener for the search bar input
+document.getElementById('search-bar').addEventListener('input', filterMembers);
