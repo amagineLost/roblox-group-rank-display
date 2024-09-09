@@ -11,7 +11,7 @@ async function fetchGroupMembers() {
         membersList.innerHTML = ''; // Clear existing content
 
         for (const role of data.roles) {
-            // Example URL, replace with the correct one if available
+            // Use the correct endpoint if available
             const roleMembersUrl = `https://api.roblox.com/groups/${groupId}/roles/${role.id}/members`;
             const roleResponse = await fetch(roleMembersUrl);
             if (!roleResponse.ok) throw new Error(`Error: ${roleResponse.statusText}`);
@@ -20,7 +20,7 @@ async function fetchGroupMembers() {
             for (const member of roleData.data) {
                 const listItem = document.createElement('li');
                 listItem.textContent = `${member.username} - ${role.name}`;
-                listItem.dataset.username = member.username; // Store the username for search filtering
+                listItem.dataset.username = member.username; // Store username for search
                 membersList.appendChild(listItem);
             }
         }
