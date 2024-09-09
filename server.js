@@ -1,24 +1,27 @@
-const express = require('express');
-const axios = require('axios');
-const app = express();
-const port = process.env.PORT || 3000;
+-- Roblox Script (Server Script)
 
-app.use(express.static('public'));
+local GroupService = game:GetService("GroupService")
+local HttpService = game:GetService("HttpService")
+local groupId = 11592051 -- Replace with your actual group ID
 
-// Endpoint to get roles
-app.get('/api/group-roles', async (req, res) => {
-    const groupId = '11592051'; // Replace with your actual group ID
-    const apiUrl = `https://groups.roblox.com/v1/groups/${groupId}/roles`;
+-- Function to get group info and roles
+local function getGroupInfo()
+    local groupInfo = GroupService:GetGroupInfoAsync(groupId)
+    local roles = groupInfo.Roles
+    return roles
+end
 
-    try {
-        const response = await axios.get(apiUrl);
-        res.send(response.data);
-    } catch (error) {
-        console.error('Error fetching group roles:', error);
-        res.status(500).send('Error fetching group roles');
-    }
-});
+-- Function to get members of a specific role
+local function getRoleMembers(roleId)
+    local roleMembers = GroupService:GetRoleMembersAsync(groupId, roleId)
+    return roleMembers
+end
 
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
-});
+-- Example usage:
+local roles = getGroupInfo()
+for _, role in ipairs(roles) do
+    local members = getRoleMembers(role.Id)
+    for _, member in ipairs(members) do
+        print(member.Username, role.Name)
+    end
+end
