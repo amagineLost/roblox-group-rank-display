@@ -1,20 +1,19 @@
-const groupId = '11592051'; // Replace with your group ID
+const groupId = '11592051'; // Replace with your actual group ID
 const apiUrl = `https://groups.roblox.com/v1/groups/${groupId}/roles`;
 
 async function fetchGroupMembers() {
     try {
         const response = await fetch(apiUrl);
-        if (!response.ok) throw new Error('Network response was not ok');
+        if (!response.ok) throw new Error(`Error: ${response.statusText}`);
         const data = await response.json();
 
         const membersList = document.getElementById('members-list');
-        membersList.innerHTML = ''; // Clear any existing content
+        membersList.innerHTML = ''; // Clear existing content
 
         for (const role of data.roles) {
-            // Fetch each role's members
             const roleMembersUrl = `https://groups.roblox.com/v1/groups/${groupId}/roles/${role.id}/users?limit=100`;
             const roleResponse = await fetch(roleMembersUrl);
-            if (!roleResponse.ok) throw new Error('Network response was not ok');
+            if (!roleResponse.ok) throw new Error(`Error: ${roleResponse.statusText}`);
             const roleData = await roleResponse.json();
 
             for (const member of roleData.data) {
