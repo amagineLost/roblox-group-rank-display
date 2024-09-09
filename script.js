@@ -1,5 +1,4 @@
-const groupId = '11592051'; // Replace with your actual group ID
-const apiUrl = '/api/group-members'; // Proxy endpoint or server-side route
+const apiUrl = '/api/group-members'; // This should match your server's endpoint
 
 async function fetchGroupMembers() {
     try {
