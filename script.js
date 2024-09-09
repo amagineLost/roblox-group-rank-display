@@ -11,7 +11,8 @@ async function fetchGroupMembers() {
         membersList.innerHTML = ''; // Clear existing content
 
         for (const role of data.roles) {
-            const roleMembersUrl = `https://groups.roblox.com/v1/groups/${groupId}/roles/${role.id}/users?limit=100`;
+            // Example URL, replace with the correct one if available
+            const roleMembersUrl = `https://api.roblox.com/groups/${groupId}/roles/${role.id}/members`;
             const roleResponse = await fetch(roleMembersUrl);
             if (!roleResponse.ok) throw new Error(`Error: ${roleResponse.statusText}`);
             const roleData = await roleResponse.json();
@@ -19,6 +20,7 @@ async function fetchGroupMembers() {
             for (const member of roleData.data) {
                 const listItem = document.createElement('li');
                 listItem.textContent = `${member.username} - ${role.name}`;
+                listItem.dataset.username = member.username; // Store the username for search filtering
                 membersList.appendChild(listItem);
             }
         }
@@ -27,5 +29,21 @@ async function fetchGroupMembers() {
         document.getElementById('members-list').textContent = 'Failed to load group members.';
     }
 }
+
+function filterMembers() {
+    const searchQuery = document.getElementById('search-bar').value.toLowerCase();
+    const members = document.querySelectorAll('#members-list li');
+
+    members.forEach(member => {
+        const username = member.dataset.username.toLowerCase();
+        if (username.includes(searchQuery)) {
+            member.style.display = '';
+        } else {
+            member.style.display = 'none';
+        }
+    });
+}
+
+document.getElementById('search-bar').addEventListener('input', filterMembers);
 
 fetchGroupMembers();
