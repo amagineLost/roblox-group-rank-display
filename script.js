@@ -1,4 +1,4 @@
-const rolesApiUrl = '/api/group-roles'; // Endpoint to get roles
+const rolesApiUrl = '/api/group-roles'; // This should match your server endpoint
 
 async function fetchGroupRoles() {
     try {
@@ -36,23 +36,3 @@ async function fetchAndDisplayMembers(url, roleName) {
         document.getElementById('members-list').textContent = 'Failed to load role members. Please check the console for details.';
     }
 }
-
-function filterMembers() {
-    const searchQuery = document.getElementById('search-bar').value.toLowerCase();
-    const members = document.querySelectorAll('#members-list li');
-
-    members.forEach(member => {
-        const username = member.dataset.username.toLowerCase();
-        if (username.includes(searchQuery)) {
-            member.style.display = '';
-        } else {
-            member.style.display = 'none';
-        }
-    });
-}
-
-// Fetch roles and members on page load
-fetchGroupRoles();
-
-// Add event listener for the search bar input
-document.getElementById('search-bar').addEventListener('input', filterMembers);
